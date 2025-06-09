@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { fetchTags } from '@/lib/api';
 import { Tag } from './types';
@@ -10,6 +9,8 @@ interface SmartTagInputProps {
   tagColor?: string;
   onChange: (tags: Tag[]) => void;
 }
+
+const DEBOUNCE_DELAY = 300;
 
 const SmartTagInput: React.FC<SmartTagInputProps> = ({
   tagColor = 'bg-blue-500',
@@ -22,13 +23,32 @@ const SmartTagInput: React.FC<SmartTagInputProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const cacheRef = useRef<Record<string, Tag[]>>({});
+
+  const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleFetchSuggestions = useCallback(
     async (query: string) => {
+      if (!query) {
+        setSuggestions([]);
+        return;
+      }
+
+      // Return cached suggestions if available
+      if (cacheRef.current[query]) {
+        const cachedTags = cacheRef.current[query].filter(
+          (tag) => !selectedTags.find((selected) => selected.id === tag.id),
+        );
+        setSuggestions(cachedTags);
+        return;
+      }
+
       setLoading(true);
       setError(null);
       try {
         const tags = await fetchTags(query);
+        cacheRef.current[query] = tags; // Cache the results
+
         const filtered = tags.filter(
           (tag) => !selectedTags.find((selected) => selected.id === tag.id),
         );
@@ -43,11 +63,23 @@ const SmartTagInput: React.FC<SmartTagInputProps> = ({
   );
 
   useEffect(() => {
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
+    }
+
     if (inputValue) {
-      handleFetchSuggestions(inputValue);
+      debounceTimeoutRef.current = setTimeout(() => {
+        handleFetchSuggestions(inputValue);
+      }, DEBOUNCE_DELAY);
     } else {
       setSuggestions([]);
     }
+
+    return () => {
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+    };
   }, [inputValue, handleFetchSuggestions]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -115,6 +147,13 @@ const SmartTagInput: React.FC<SmartTagInputProps> = ({
           onKeyDown={handleKeyDown}
           className="flex-grow outline-none p-1"
           placeholder="Type to search..."
+          aria-autocomplete="list"
+          aria-controls="suggestions-list"
+          aria-activedescendant={
+            highlightedIndex !== null
+              ? `suggestion-${highlightedIndex}`
+              : undefined
+          }
         />
       </div>
       {loading && <div className="text-sm text-gray-500 mt-1">Loading...</div>}
