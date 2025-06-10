@@ -130,7 +130,9 @@ This improves the safety and performance of dynamic React applications by defaul
 ## 📸 Screenshot
 
 ![Smart Tag Input UI](./public/screenshot.png)
-![Smart Tag Input UI](./public/screenshot2.png)
+
+![Smart Tag Input UI with styling](./screenshot2.png)
+
 
 ---
 
