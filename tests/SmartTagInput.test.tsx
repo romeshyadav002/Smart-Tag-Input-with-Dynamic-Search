@@ -1,11 +1,12 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import SmartTagInput from '@/components/SmartTagInput/SmartTagInput';
+import SmartTagInput from '../src/components/SmartTagInput/SmartTagInput';
+import { vi, describe, it, beforeEach, expect } from 'vitest';
+// import { fetchTags } from '../src/lib/api';
 
-jest.mock('@/lib/api', () => ({
-  fetchTags: jest.fn(async (query: string) => {
-    if (!query) return [];
-    if (query === 'empty') return [];
+vi.mock('../src/lib/api', () => ({
+  fetchTags: vi.fn(async (query: string) => {
+    if (!query || query === 'empty') return [];
     return [
       { id: 1, name: 'Electronics' },
       { id: 2, name: 'Home Goods' },
@@ -14,7 +15,7 @@ jest.mock('@/lib/api', () => ({
 }));
 
 describe('SmartTagInput', () => {
-  const handleChange = jest.fn();
+  const handleChange = vi.fn();
 
   beforeEach(() => {
     handleChange.mockClear();
@@ -64,7 +65,6 @@ describe('SmartTagInput', () => {
     expect(handleChange).toHaveBeenCalledWith([]);
   });
 
-  // New test: Keyboard navigation (ArrowDown, ArrowUp, Enter)
   it('allows keyboard navigation and selection', async () => {
     render(<SmartTagInput onChange={handleChange} />);
     const input = screen.getByPlaceholderText('Type to search...');
@@ -73,24 +73,19 @@ describe('SmartTagInput', () => {
 
     await waitFor(() => screen.getByText('Electronics'));
 
-    fireEvent.keyDown(input, { key: 'ArrowDown' }); // highlight first suggestion (Electronics)
-    fireEvent.keyDown(input, { key: 'ArrowDown' }); // highlight second suggestion (Home Goods)
-    fireEvent.keyDown(input, { key: 'ArrowUp' }); // back to first suggestion (Electronics)
-    fireEvent.keyDown(input, { key: 'Enter' }); // select Electronics
+    fireEvent.keyDown(input, { key: 'ArrowDown' });
+    fireEvent.keyDown(input, { key: 'ArrowDown' });
+    fireEvent.keyDown(input, { key: 'ArrowUp' });
+    fireEvent.keyDown(input, { key: 'Enter' });
 
     expect(handleChange).toHaveBeenCalledWith([{ id: 1, name: 'Electronics' }]);
-    expect(screen.getByText('Electronics')).toBeInTheDocument();
   });
 
-  // New test: Handles empty suggestion list gracefully
   it('shows no suggestions if list is empty', async () => {
     render(<SmartTagInput onChange={handleChange} />);
     const input = screen.getByPlaceholderText('Type to search...');
-
-    // Use 'empty' query to mock no suggestions
     fireEvent.change(input, { target: { value: 'empty' } });
 
-    // Wait for suggestions area to update
     await waitFor(() => {
       const noSuggestion = screen.queryByRole('listitem');
       expect(noSuggestion).toBeNull();

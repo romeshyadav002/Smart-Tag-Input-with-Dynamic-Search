@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { fetchTags } from '@/lib/api';
+import { fetchTags } from '../../lib/api';
 import { Tag } from './types';
 import TagItem from './Tag';
 import SuggestionsList from './SuggestionsList';
