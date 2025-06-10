@@ -1,36 +1,139 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Smart Tag Input with Dynamic Search
 
-## Getting Started
+This project implements a reusable, accessible multi-select tag input component with dynamic suggestions. Built with **Next.js (App Router)**, **TypeScript**, **Tailwind CSS**, and tested using **Vitest** and **@testing-library/react**.
 
-First, run the development server:
+## ✨ Features
+
+- Dynamic tag suggestions with async API call
+- Keyboard navigation (↑, ↓, ⏎, Esc, Backspace)
+- Tag selection and removal
+- Customizable tag color via props
+- Debounced search input
+- Local cache to avoid redundant API calls
+- Accessible & fully tested
+
+## 📦 Tech Stack
+
+- **Framework:** [Next.js App Router](https://nextjs.org/docs/app/building-your-application/routing)
+- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+- **Language:** TypeScript and javascript
+- **Testing:** [Vitest](https://vitest.dev/), [Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
+
+---
+
+## 📁 Project Structure
+
+```
+/src
+  /components
+    SmartTagInput/
+      SmartTagInput.tsx
+      Tag.tsx
+      SuggestionsList.tsx
+  /lib
+    api.ts         # mocked API
+/tests
+  SmartTagInput.test.tsx
+```
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone the repo
+
+```bash
+git clone https://github.com/romeshyadav002/Smart-Tag-Input-with-Dynamic-Search.git
+cd smart-tag-input
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+# or
+yarn install
+```
+
+### 3. Run the development server
 
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ✅ Running Tests
 
-## Learn More
+### Run all tests:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run test
+# or
+yarn test
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Commands included:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```jsonc
+// package.json scripts
+{
+  "dev": "next dev",
+  "build": "next build",
+  "start": "next start",
+  "test": "vitest run",
+}
+```
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🧪 Test Coverage
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The following test scenarios are covered:
+
+- ✅ Renders the input field
+- ✅ Fetches and displays suggestions on typing
+- ✅ Selects a tag via click and keyboard
+- ✅ Removes tags via "x" button and Backspace
+- ✅ Handles empty results gracefully
+- ✅ Esc key to clear suggestions
+- ✅ Debounced API call + cached results
+
+See [`TEST_PLAN.md`](./TEST_PLAN.md) for full details.
+
+---
+
+## 📘 Learn More
+
+- [Next.js App Router](https://nextjs.org/docs/app)
+- [Tailwind CSS](https://tailwindcss.com/docs)
+- [Vitest](https://vitest.dev/)
+- [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
+- [Debounce in React](https://usehooks.com/useDebounce/)
+
+---
+
+## 🔒 Security Note
+
+Next.js handles:
+- **Deferred script loading** automatically
+- Protection against **Cross-Site Scripting (XSS)**
+
+This improves the safety and performance of dynamic React applications by default.
+
+---
+
+## 📸 Screenshot
+
+![Smart Tag Input UI](./public/screenshot.png)
+![Smart Tag Input UI](./public/screenshot2.png)
+
+---
+
+## 📄 License
+
+Feel free to fork and customize this component!
