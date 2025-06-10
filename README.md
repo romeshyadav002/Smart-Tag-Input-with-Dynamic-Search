@@ -19,6 +19,7 @@ This project implements a reusable, accessible multi-select tag input component 
 - **Language:** TypeScript and javascript
 - **Testing:** [Vitest](https://vitest.dev/), [Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
 
+To understand the reasoning behind major technical decisions in this project, please refer to the [Decision Log](./DECISION_LOG.md).
 ---
 
 ## 📁 Project Structure
