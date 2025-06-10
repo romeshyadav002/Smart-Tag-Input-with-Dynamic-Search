@@ -15,7 +15,7 @@ export default function Home() {
   const [tagColor, setTagColor] = useState(TAG_COLORS[0].value);
 
   return (
-    <main className="min-h-screen p-8 bg-gray-100 flex flex-col items-center">
+    <main className="min-h-screen p-8 bg-cyan-300 flex flex-col items-center">
       <h1 className="text-2xl font-bold mb-4">Smart Tag Input Demo</h1>
       <div className="flex flex-row justify-center items-center mb-10 gap-4">
         <label htmlFor="tagColor" className="block  font-semibold">
